@@ -26,6 +26,7 @@ enum One {
 }
 }
 
+
 #[test]
 fn one() {
     use ep::FromPrimitive;
@@ -232,4 +233,76 @@ fn documented() {
     use ep::FromPrimitive;
     assert_eq!(Documented::from_i32(17), Some(Documented::A));
     assert_eq!(Documented::from_i32(91), None);
+}
+
+enum_from_primitive! {
+#[derive(Debug, PartialEq)]
+pub(crate) enum PubEmptyVisibility {
+}
+}
+
+#[test]
+fn pub_empty_visibility() {
+    use ep::FromPrimitive;
+    assert_eq!(PubEmptyVisibility::from_i32(91), None);
+}
+
+enum_from_primitive! {
+#[derive(Debug, PartialEq)]
+pub(crate) enum PubOneVisibility {
+    A = 17
+}
+}
+
+#[test]
+fn pub_one_visibility() {
+    use ep::FromPrimitive;
+    assert_eq!(PubOneVisibility::from_i32(17), Some(PubOneVisibility::A));
+    assert_eq!(PubOneVisibility::from_i32(91), None);
+}
+
+enum_from_primitive! {
+#[derive(Debug, PartialEq)]
+pub(crate) enum PubOneCommaVisibility {
+    A = 17,
+}
+}
+
+#[test]
+fn pub_one_comma_visibility() {
+    use ep::FromPrimitive;
+    assert_eq!(PubOneCommaVisibility::from_i32(17), Some(PubOneCommaVisibility::A));
+    assert_eq!(PubOneCommaVisibility::from_i32(91), None);
+}
+
+enum_from_primitive! {
+#[derive(Debug, PartialEq)]
+pub(crate) enum PubTwoVisibility {
+    A = 17,
+    B = 42
+}
+}
+
+#[test]
+fn pub_two_visibility() {
+    use ep::FromPrimitive;
+    assert_eq!(PubTwoVisibility::from_i32(17), Some(PubTwoVisibility::A));
+    assert_eq!(PubTwoVisibility::from_i32(42), Some(PubTwoVisibility::B));
+    assert_eq!(PubTwoVisibility::from_i32(91), None);
+}
+
+enum_from_primitive! {
+#[derive(Debug, PartialEq)]
+pub(crate) enum PubTwoCommaVisibility {
+    A = 17,
+    B = 42,
+}
+}
+
+#[test]
+fn pub_two_comma_visibility() {
+    use ep::FromPrimitive;
+    assert_eq!(PubTwoCommaVisibility::from_i32(17), Some(PubTwoCommaVisibility::A));
+    assert_eq!(PubTwoCommaVisibility::from_i32(42), Some(PubTwoCommaVisibility::B));
+    assert_eq!(PubTwoCommaVisibility::from_i32(91), None);
 }

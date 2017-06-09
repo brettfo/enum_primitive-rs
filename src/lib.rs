@@ -193,4 +193,56 @@ macro_rules! enum_from_primitive {
         }
         enum_from_primitive_impl! { $name, $( $( $variant )+ )+ }
     };
+
+    (
+        $( #[$enum_attr:meta] )*
+        pub($vis:vis) enum $name:ident {
+            $( $( #[$variant_attr:meta] )* $variant:ident ),+ $( = $discriminator:expr, $( $( #[$variant_two_attr:meta] )* $variant_two:ident ),+ )*
+        }
+    ) => {
+        $( #[$enum_attr] )*
+        pub($vis) enum $name {
+            $( $( #[$variant_attr] )* $variant ),+ $( = $discriminator, $( $( #[$variant_two_attr] )* $variant_two ),+ )*
+        }
+        enum_from_primitive_impl! { $name, $( $variant )+ $( $( $variant_two )+ )* }
+    };
+
+    (
+        $( #[$enum_attr:meta] )*
+        pub($vis:vis) enum $name:ident {
+            $( $( $( #[$variant_attr:meta] )* $variant:ident ),+ = $discriminator:expr ),*
+        }
+    ) => {
+        $( #[$enum_attr] )*
+        pub($vis) enum $name {
+            $( $( $( #[$variant_attr] )* $variant ),+ = $discriminator ),*
+        }
+        enum_from_primitive_impl! { $name, $( $( $variant )+ )* }
+    };
+
+    (
+        $( #[$enum_attr:meta] )*
+        pub($vis:vis) enum $name:ident {
+            $( $( #[$variant_attr:meta] )* $variant:ident ),+ $( = $discriminator:expr, $( $( #[$variant_two_attr:meta] )* $variant_two:ident ),+ )*,
+        }
+    ) => {
+        $( #[$enum_attr] )*
+        pub($vis) enum $name {
+            $( $( #[$variant_attr] )* $variant ),+ $( = $discriminator, $( $( #[$variant_two_attr] )* $variant_two ),+ )*,
+        }
+        enum_from_primitive_impl! { $name, $( $variant )+ $( $( $variant_two )+ )* }
+    };
+
+    (
+        $( #[$enum_attr:meta] )*
+        pub($vis:vis) enum $name:ident {
+            $( $( $( #[$variant_attr:meta] )* $variant:ident ),+ = $discriminator:expr ),+,
+        }
+    ) => {
+        $( #[$enum_attr] )*
+        pub($vis) enum $name {
+            $( $( $( #[$variant_attr] )* $variant ),+ = $discriminator ),+,
+        }
+        enum_from_primitive_impl! { $name, $( $( $variant )+ )+ }
+    };
 }
